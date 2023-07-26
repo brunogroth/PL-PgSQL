@@ -6,21 +6,25 @@
   - Realizar operações computacionais complexas
   - Fácil de Implementar
 
-## Criando Funções
+# Criando Funções
 
+  ```
   CREATE FUNCION somefunc(integer, text) RETURNS integer AS 'function body text' LANGUAGE plpgsql;
+  ```
 
   Construção:
+  ```
   CREATE FUNCTION <nome da funcao>
   Parâmetros da função 
   Tipo de retorno + AS
   Implementamos a função 
   LANGUAGE plpgsql
+  ```
 
   PL-PGSQL é case insensitive
 
-  ### BLOCO DE CÓDIGO
-
+  ## BLOCO DE CÓDIGO
+  ```
   $$ 
   DECLARE
     -- declaração de nome + tipo de variáveis
@@ -28,9 +32,9 @@
     -- início da implementação com variáveis e parâmetros da função
   END;
   $$ LANGUAGE plpgsql;
-
-  #### Exemplo
-
+  ```
+  ## Exemplo
+  ```
   DECLARE
   user_id integer;
   preco numeric;
@@ -40,12 +44,13 @@
   quantidade integer DEFAULT 32;
   uri varchar := 'https://mysite.com';
   k CONSTANT integer := 10;
+  ```
 
-  ### PARÂMETROS
+  ## PARÂMETROS
   Os parâmetros são as variáveis importantes para a chamada da função
   
   Sintaxe: nome + tipo
- 
+  ```
   CREATE FUNCTION aplicaTaxa(valor1 real, valor2 real)
   RETURNS real AS 
   $$
@@ -53,11 +58,13 @@
     RETURN (valor1 + valor2) * 0.06;
   END;
   $$ LANGUAGE plpgsql;
+  ```
 
-  ### SITUACIONAIS
+  ## SITUACIONAIS
   Parâmetros podem ser anônimos e nesse caso devem ser chamados por $1, $2, [...]. (DIMINUI LEGIBILIDADE)
   Também podem ser especificados por alias no DECLARE da função.
 
+  ```
   CREATE FUNCTION aplicaTaxa(real, real)
   RETURNS real AS 
   $$
@@ -67,8 +74,9 @@
     RETURN ($1 + valor2) * 0.06;
   END;
   $$ LANGUAGE plpgsql;
+  ```
 
-## CHAMANDO FUNÇÕES
+# CHAMANDO FUNÇÕES
 
   As chamadas de funções são feitas usando a cláusula SELECT
   
