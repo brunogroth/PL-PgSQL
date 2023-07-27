@@ -80,4 +80,9 @@
 
   As chamadas de funções são feitas usando a cláusula SELECT
   
+  ```
   SELECT aplicaTaxa(10,30.50);
+  ```
+
+# EXERCÍCIO 1
+  Hello World
