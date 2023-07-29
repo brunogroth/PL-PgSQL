@@ -55,31 +55,32 @@ returns void as
 $$
 begin
  -- Inserir na tabela professor
-	insert into professor values (id, nome, data_nasc, salario);
+	select createProfessor(id, nome, data_nasc, salario);
 
 end; $$
 language plpgsql;
 
 select createProfessor(1, 'Dr Victor', '10/03/1985', 5000);
+
 select * from professor;
 
-insert into professor values (2, 'Gil Gomes', '01/04/1962',8642.60);
-insert into professor values (3, 'Renata Costa', '02/05/1988',1250.30);
-insert into professor values (4,'Renato Gil', '01/01/1997',998.00);
-insert into professor values (5,'Pedro Silva', '03/05/2001',3500);
-insert into professor values (6,'Raquel Souza', '29/10/1996',2400);
-insert into professor values (7, 'Sêneca Figueiredo', '11/11/1990',6700.34);
-insert into professor values (8, 'Harry Potter', '01/04/1998',998);
-insert into professor values (9, 'Cícero', '01/12/1986',12150.34);
-insert into professor values (10, 'Jimmy Page', '03/05/2001',1200);
-insert into professor values (11, 'Marco Aurélio', '03/12/2000',998);
-insert into professor values (12, 'Helena Silva', '02/01/1997',998);
-insert into professor values (13, 'Sócrates Pereira', '29/10/1995',3200);
-insert into professor values (14, 'Mata Rocha', '03/12/2001',3570);
-insert into professor values (15, 'Maria Carla', '02/01/1997',1998);
-insert into professor values (16, 'Renato Feliz', '01/07/2001',6789.34);
-insert into professor values (17, 'Lucas Sávio', '29/10/2000',3410);
-insert into professor values (18,'Raul Seixas', '02/02/1978',12150.34);
+select createProfessor(2, 'Gil Gomes', '01/04/1962',8642.60);
+select createProfessor(3, 'Renata Costa', '02/05/1988',1250.30);
+select createProfessor(4,'Renato Gil', '01/01/1997',998.00);
+select createProfessor(5,'Pedro Silva', '03/05/2001',3500);
+select createProfessor(6,'Raquel Souza', '29/10/1996',2400);
+select createProfessor(7, 'Sêneca Figueiredo', '11/11/1990',6700.34);
+select createProfessor(8, 'Harry Potter', '01/04/1998',998);
+select createProfessor(9, 'Cícero', '01/12/1986',12150.34);
+select createProfessor(10, 'Jimmy Page', '03/05/2001',1200);
+select createProfessor(11, 'Marco Aurélio', '03/12/2000',998);
+select createProfessor(12, 'Helena Silva', '02/01/1997',998);
+select createProfessor(13, 'Sócrates Pereira', '29/10/1995',3200);
+select createProfessor(14, 'Mata Rocha', '03/12/2001',3570);
+select createProfessor(15, 'Maria Carla', '02/01/1997',1998);
+select createProfessor(16, 'Renato Feliz', '01/07/2001',6789.34);
+select createProfessor(17, 'Lucas Sávio', '29/10/2000',3410);
+select createProfessor(18,'Raul Seixas', '02/02/1978',12150.34);
 
 select * from professor;
 -- Exercícios IN, OUT, INOUT
@@ -108,39 +109,40 @@ select * from min_avg_max();
 -- Exercício 5 - Crie uma função que, dado o ID de um professor, retorna TRUE
 -- se ele ganha mais que a média salarial.
 
-create or replace function isAboveAverage(professor_id int)
+create or replace function isAboveAverage(professor_id int) returns bool
 as
 $$
 DECLARE 
-	average numeric;
-	salario numeric;
+	averag numeric;
+	salary numeric;
 	
 BEGIN
-	average := select average from min_avg_max();
-	salario := select salario from professor where id = professor_id;
+	select avg(salario) from professor into averag;
+	select salario from professor where id = professor_id into salary;
 	
-	if(salario > average){
+	if salary > averag then
 		return true;
-	}
+	end if;
 
 END;
 $$ language plpgsql;
 
+select isAboveAverage(1);
+
 
 -- LAÇOS DE REPETIÇÃO
 
--- Exercício 6 - Escreva uma função que calcule o fatorial de um número inteiro positivo.
+-- Exercício 6 - Escreva uma função que calcule o fatorial de um número inteiro positivo. 
+-- (WHILE)
 
 CREATE OR replace FUNCTION fatorial(x int) returns int
 AS
 $$
 DECLARE
-	fatorial int;
-	i int;
+	fatorial int := x;
+	i int := x-1;
 	conta int;
 begin
-	fatorial := x;
-	i := x-1;
 
 	while i > 0 loop
 		fatorial = fatorial * i;
@@ -157,9 +159,18 @@ select fatorial(6);
 
 -- teste de mesa para debug
 
--- x = 4
--- i = 3
+-- select fatorial(4);
+-- x = 4 | i = 3
 -- i > 0 ? conta = 12 | fatorial = 12 | i = 2
 -- i > 0 ? conta = 6 | fatorial = 12 + 6 // Aqui esta o problema // Resolvido | i = 1
 -- i > 0 ? conta = 6 | fatorial = 18 + 2 // Aqui esta o problema // Resolvido | i = 0
 -- i > 0 ? false (end loop)
+
+
+-- FOR variavel IN i..j LOOP
+-- commands;
+-- END LOOP;
+
+-- Exercício 7 - - Escreva uma função que calcule o fatorial de um número inteiro positivo. 
+-- (FOR)
+
