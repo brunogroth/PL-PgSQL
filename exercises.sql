@@ -141,7 +141,7 @@ $$
 DECLARE
 	fatorial int := x;
 	i int := x-1;
-	conta int;
+
 begin
 
 	while i > 0 loop
@@ -167,10 +167,29 @@ select fatorial(6);
 -- i > 0 ? false (end loop)
 
 
--- FOR variavel IN i..j LOOP
+-- FOR variavel IN init..final LOOP
 -- commands;
 -- END LOOP;
 
 -- Exercício 7 - - Escreva uma função que calcule o fatorial de um número inteiro positivo. 
 -- (FOR)
 
+create or replace function fatorialFor(x int) returns int
+as
+$$
+declare 
+	fatorial int := x;
+	i int := x - 1;
+	
+begin
+	raise notice 'x: %', i;
+	for i in reverse i..1 loop -- diminuir ao invés de somar
+		fatorial = fatorial * i;
+		raise notice 'x: % i: % fat: %', x, i, fatorial; -- imprime na tela
+	end loop;
+	
+	return fatorial;
+end;
+$$ language plpgsql;
+
+select fatorialFor(6);

@@ -84,5 +84,14 @@
   SELECT aplicaTaxa(10,30.50);
   ```
 
-# EXERCÍCIO 1
-  Hello World
+# EXERCÍCIOS
+
+# LAÇOS DE REPETICAO
+
+	WHILE i > 0 LOOP
+
+  END LOOP;
+
+  FOR variavel IN init..final LOOP
+
+  END LOOP;
