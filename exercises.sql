@@ -193,3 +193,103 @@ end;
 $$ language plpgsql;
 
 select fatorialFor(6);
+
+-- Exercício 8 - Crie uma função que recebe um inteiro positivo e devolve um array
+-- com os números de 1 até o inteiro recebido.
+
+create or replace function naturais(n integer) returns integer[] as 
+$$
+declare
+	i integer;
+	res integer[];
+BEGIN
+	for i in  1..n loop
+		res[i] = i;
+	end loop;
+
+	return res;
+end;
+$$ language plpgsql;
+
+select naturais(12);
+
+-- -------------------------------------------------------------------
+CREATE TABLE DEPARTAMENTO (
+ nro_depto INTEGER, 
+ nome_depto VARCHAR(20),
+ PRIMARY KEY (nro_depto)
+ );
+
+CREATE TABLE EMPREGADO (
+ cod_emp INTEGER, 
+ p_nome VARCHAR(15) NOT NULL, 
+ sobrenome VARCHAR(30), 
+ dt_niver DATE, 
+ end_emp VARCHAR(50),
+ sexo CHAR, 
+ salario NUMERIC, 
+ cod_supervisor INTEGER NOT NULL,
+ nro_depto INTEGER NOT NULL,
+ PRIMARY KEY (cod_emp),
+ FOREIGN KEY (cod_supervisor) REFERENCES EMPREGADO(cod_emp) ON DELETE CASCADE,
+ FOREIGN KEY (nro_depto) REFERENCES DEPARTAMENTO(nro_depto) ON DELETE CASCADE
+ );
+ 
+INSERT INTO DEPARTAMENTO(nro_depto, nome_depto) VALUES (1, 'Papaleguas');
+INSERT INTO DEPARTAMENTO(nro_depto, nome_depto) VALUES (2, 'Frajola');
+INSERT INTO DEPARTAMENTO(nro_depto, nome_depto) VALUES (3, 'Piu Piu');
+
+INSERT INTO EMPREGADO (cod_emp, p_nome, sobrenome, dt_niver, end_emp, sexo, salario, cod_supervisor, nro_depto) VALUES (7, 'Carla', 'Perez', '12-12-1988', 'Rua X, 123', 'F', 20000.50, 1, 1),
+(8, 'Carlos', 'Magno', '12-05-1978', 'Rua X, 200', 'M', 1500, 1, 1),
+(9, 'João', 'Silva', '07/02/1990', 'Rua Y, 200', 'M', 2730.83, 1, 2),
+(10, 'Manu', 'Gomez', '05-12-1998', 'Rua X, 100', 'F', 25000.50, 3, 2),
+(11, 'Miguel', 'Ruan', '01-12-2000', 'Rua T, 200', 'M', 2500, 1, 3),
+(12, 'Joana', 'Souza', '07/04/1995', 'Rua ASX, 1345', 'F', 3130, 3, 2);
+
+-- Exercício 9 - Crie uma função que imprime os códigos e os nomes dos funcionários no formato:
+-- Empregado 1 - Código: <cod_emp> | Nome: <nome_emp>
+
+create or replace function get_empregados() returns void as
+$$
+declare
+	tupla record; -- ou empregado%rowtype
+	i int = 1;
+
+begin
+	for tupla in
+		select * from empregado order by cod_emp
+	loop
+		raise notice 'Empregado % - Código: % | Nome: % %', i, tupla.cod_emp, tupla.p_nome, tupla.sobrenome;
+		i = i + 1;
+	end loop;
+	
+	
+end; $$ language plpgsql;
+
+select get_empregados();
+
+-- Exercício 10 - Crie uma função que, dado um mês, retorna um array com os IDs dos aniversariantes do mês.
+
+create or replace function aniversariante_mes(mes int) returns int[] as 
+$$
+declare 
+	aniversariantes_id int[];
+	tupla record; -- ou empregado%rowtype
+	mes_aniversario int;
+	i int = 0;
+begin
+	for tupla in select * from empregado loop
+		 select extract (month from tupla.dt_niver) into mes_aniversario;
+		
+		if mes_aniversario = mes then
+			aniversariantes_id[i] = tupla.cod_emp;
+			i = i + 1;
+		end if;
+	end loop;
+
+	return aniversariantes_id;	
+	
+end; 
+$$ language plpgsql;
+
+select aniversariante_mes(2);

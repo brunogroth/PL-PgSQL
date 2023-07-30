@@ -7,7 +7,6 @@
   - Fácil de Implementar
 
 # Criando Funções
-
   ```
   CREATE FUNCION somefunc(integer, text) RETURNS integer AS 'function body text' LANGUAGE plpgsql;
   ```
@@ -22,6 +21,11 @@
   ```
 
   PL-PGSQL é case insensitive
+
+  ## PROCEDURES
+  Procedures são funções que não dão um retorno. Funções com retorno void são iguais a Procedures.
+  São chamadas usando call procedureName()
+
 
   ## BLOCO DE CÓDIGO
   ```
@@ -95,3 +99,30 @@
   FOR variavel IN init..final LOOP
 
   END LOOP;
+
+# Funções de Agregação e Arredondamento
+  MIN MAX AVG SUM COUNT
+
+# TRANSACTIONS
+BEGIN;
+  -- comandos;
+COMMIT;
+
+  ## ROLLBACK DE TRANSACTIONS
+
+  "ROLLBACK;" pararia a função ali.
+  "SAVEPOINT <nomeDoSavePoint>"
+  "ROLLBACK TO <nomeDoSavePoint>" no meio da transaction faz com que as alterações entre o savepoint e o rollback to sejam desprezadas
+
+# ARRAYS
+Não precisam ter tamanho pré-definido.
+
+  array_name type[]
+
+  ## Ex:
+  fruits varchar[];
+
+  fruits[0] = 'Pineapple';
+  fruits[1] = 'Banana';
+  OR
+  fruits = {'Melon', 'Orange'};
