@@ -125,4 +125,4 @@ Não precisam ter tamanho pré-definido.
   fruits[0] = 'Pineapple';
   fruits[1] = 'Banana';
   OR
-  fruits = {'Melon', 'Orange'};
+  fruits = {'Melon', 'Orange'}; 
